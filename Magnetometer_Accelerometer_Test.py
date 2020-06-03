@@ -27,8 +27,8 @@ accel = adafruit_lsm303_accel.LSM303_Accel(i2c)
 #for LSM303AGR
 mag = adafruit_lis2mdl.LIS2MDL(i2c)
 #for LSM303DLH
-#mag = adafruit_lis2mdl.LSM303DLH_Mag(i2c)
+#mag = adafruit_lsm303dlh_mag.LSM303DLH_Mag(i2c)
 
 #Print values
-print (“Acceleration (m/s^2): X=%0.3f Y=%0.3f Z=%0.3f”%accel.acceleration) 
-print (“Magnetometer (uTeslas): X=%0.3f Y=%0.3f Z=%0.3f”%mag.magnetic) 
+print ("Acceleration (m/s^2): X=%0.3f Y=%0.3f Z=%0.3f"%accel.acceleration) 
+print ("Magnetometer (uTeslas): X=%0.3f Y=%0.3f Z=%0.3f"%mag.magnetic) 
