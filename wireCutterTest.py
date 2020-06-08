@@ -103,19 +103,20 @@ if x == "1":
 x = input("Run timed tests? <1,0>")
 if x == "1":
     # Turn on WC1 in succession 10 times
-    for i in range(10):
+    for i in range(1,3):
         WC1.set_state( GPIO.LOW, GPIO.HIGH, GPIO.HIGH )
-        sleep(2)
+        sleep(i*2)
         WC1.set_state( GPIO.HIGH, GPIO.LOW, GPIO.LOW )
-        sleep(2)
+        input( str(i*2) + " second test complete. Press <ENTER> to continue")
+        
 
 
     # Turn on WC2 in succession 10 times
-    for j in range(10):
+    for j in range(1,3):
         WC2.set_state( GPIO.LOW, GPIO.HIGH, GPIO.HIGH )
-        sleep(2)
+        sleep(j*2)
         WC2.set_state( GPIO.HIGH, GPIO.LOW, GPIO.LOW )
-        sleep(2)
+        input( str(j*2) + " second test complete. Press <ENTER> to continue")
 
 # cleanup and end program
 input("All tests completed. Exiting program. Press <ENTER> to quit." )
