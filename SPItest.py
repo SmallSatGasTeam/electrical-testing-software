@@ -43,11 +43,7 @@ spi = spidev.SpiDev()
 spi.open(0,0)
 spi.no_cs = False
 
-msg = 0b11
-msg = ((msg << 1) + 1) << 5
-msg = [msg, 0b00000000]
-
-reply = spi.xfer2(msg)
+reply = spi.readbytes(2)
 print("Reply from Temp0: ")
 print(reply)
 
@@ -60,11 +56,7 @@ spi = spidev.SpiDev()
 spi.open(0,1)
 spi.no_cs = False
 
-msg = 0b11
-msg = ((msg << 1) + 1) << 5
-msg = [msg, 0b00000000]
-# the followin
-reply = spi.xfer2(msg)
+reply = spi.readbytes(2)
 print("Reply from Temp1: ")
 print(reply)
 
