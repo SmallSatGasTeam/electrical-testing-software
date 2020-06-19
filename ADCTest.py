@@ -61,7 +61,7 @@ input("Getting data from Sun sensor 4, channel 3, press <Enter> to continue...")
 msg = 0b11
 msg = ((msg << 1) + 3) << 5
 msg = [msg, 0b00000000]
-sun1 = spi.xfer2(msg)
+sun4 = spi.xfer2(msg)
 print("Sun sensor 4 value: ")
 print(sun4)
 
