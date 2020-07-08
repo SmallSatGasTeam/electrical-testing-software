@@ -71,8 +71,8 @@ GPIO.setmode(GPIO.BOARD)
 
 # Create 2 WireCutter Objects
 # The constructors for each object will initialize each to its completely OFF state
-WC1 = WireCutter( "WC1", 16, 11, 12, 31, 32, 33 )
-WC2 = WireCutter( "WC2", 18, 13, 15, 31, 32, 33 )
+WC1 = WireCutter( "WC1", 7, 38, 36, 31, 32, 33 )
+WC2 = WireCutter( "WC2", 29, 37, 35, 31, 32, 33 )
 
 
 # Initialize the GPIO pins for LEDs
