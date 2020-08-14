@@ -11,9 +11,9 @@ mosi = 19
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(adc_cs, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(sclk, GPIO.OUT)
-GPIO.setup(miso, GPIO.IN)
-GPIO.setup(mosi, GPIO.OUT)
+#GPIO.setup(sclk, GPIO.OUT)
+#GPIO.setup(miso, GPIO.IN)
+#GPIO.setup(mosi, GPIO.OUT)
 
 input("Testing connection to ADC, press <Enter> to continue...")
 
@@ -21,7 +21,7 @@ spi = spidev.SpiDev()
 spi.open(0,0)
 spi.no_cs = True
 GPIO.output(adc_cs, GPIO.LOW)
-GPIO.output(sclk, GPIO.LOW)
+#GPIO.output(sclk, GPIO.LOW)
 
 msg = 0b11
 msg = ((msg << 1) + 1) << 5
@@ -32,7 +32,7 @@ print("Reply from ADC: ")
 print(reply)
 
 GPIO.output(adc_cs, GPIO.HIGH)
-GPIO.output(sclk, GPIO.HIGH)
+#GPIO.output(sclk, GPIO.HIGH)
 
 spi.close()
 
