@@ -2,6 +2,7 @@ import numpy as np
 import spidev
 import RPi.GPIO as GPIO
 import sys
+from dtetime import date
 
 adc_cs = 22
 spi = spidev.SpiDev()
@@ -39,7 +40,13 @@ def getSample(channel):
     return uv_val
 
 def main():
-    sys.stdout = open("ADC_callibration_constants.txt", "w")  #Comment this line to have values printed to console instead 
+    
+    ofile
+    if len(sys.argv) > 1:
+        ofile = open(str(sys.argv[1]), "a")
+        ofile.write("----------{}----------\n".format(today))
+    else
+        ofile = sys.stdout
    
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(adc_cs, GPIO.OUT, initial=GPIO.HIGH)
@@ -65,9 +72,9 @@ def main():
             expected.append((voltage*3.3)/numSamples)
             measured.append(getSample(chan))
             
-        print("For channel {}:".format(chan))
-        print("measured voltages: {}".format(measured))
-        print("expected voltages: {}".format(expected)) 
+        print("For channel {}:".format(chan), file=ofile)
+        print("measured voltages: {}".format(measured), file=ofile)
+        print("expected voltages: {}".format(expected), file=ofile) 
 
         reg_error = []
         raw_error = []
@@ -76,18 +83,18 @@ def main():
         for i in range(len(expected)):
             raw_error.append(abs(expected[i] - measured[i]))
 
-        print('Maximum error before regression: {}'.format(max(raw_error)))
+        print('Maximum error before regression: {}'.format(max(raw_error)), file=ofile)
 
         B = calculate_regression(expected, measured, reg_error)
 
-        print('Maximum error after regression: {}'.format(max(reg_error)))
-        print('Regression coefficients: ')
-        print(B)
+        print('Maximum error after regression: {}'.format(max(reg_error)), file=ofile)
+        print('Regression coefficients: ', file=ofile)
+        print(B, file=ofile)
 
     spi.close()
     GPIO.cleanup()
-    if sys.stdout.name != '<stdout>'
-        sys.stdout.close()
+    if len(sys.argv) > 1:
+        ofile.close()
 
 if __name__ == "__main__":
     main()
