@@ -39,7 +39,7 @@ def getSample(channel):
     return uv_val
 
 def main():
-    sys.stdout = open("ADC_callibration_constants.txt", "w")  #Comment this line to have values printed to console instead 
+#    sys.stdout = open("ADC_callibration_constants.txt", "w")  #Comment this line to have values printed to console instead 
    
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(adc_cs, GPIO.OUT, initial=GPIO.HIGH)
@@ -61,8 +61,8 @@ def main():
     for chan in range(numChannels):
         x = input("Connect voltage supply to channel {}".format(chan))
         for voltage in range(numSamples):
-            x = input("Set supply to {} volts".format((voltage*3.3)/numSamples))
-            expected.append((voltage*3.3)/numSamples)
+            x = input("Set supply to {} volts".format(round((voltage*3.3)/numSamples,2)))
+            expected.append(round((voltage*3.3)/numSamples,2))
             measured.append(getSample(chan))
             
         print("For channel {}:".format(chan))
@@ -86,7 +86,7 @@ def main():
 
     spi.close()
     GPIO.cleanup()
-    if sys.stdout.name != '<stdout>'
+    if sys.stdout.name != '<stdout>':
         sys.stdout.close()
 
 if __name__ == "__main__":
