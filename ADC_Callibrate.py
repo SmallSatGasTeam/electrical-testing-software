@@ -2,6 +2,7 @@ import numpy as np
 import spidev
 import RPi.GPIO as GPIO
 import sys
+from dtetime import date
 
 adc_cs = 22
 spi = spidev.SpiDev()
@@ -39,7 +40,15 @@ def getSample(channel):
     return uv_val
 
 def main():
-#    sys.stdout = open("ADC_callibration_constants.txt", "w")  #Comment this line to have values printed to console instead 
+    
+    ofile
+    if len(sys.argv) > 1:
+        print("All callibration data will be printed to {}".format(sys.argv(1)))
+        ofile = open(str(sys.argv[1]), "a")
+        ofile.write("----------{}----------\n".format(today))
+    else:
+        print("No text file given. All callibration data will be printed to the console only.")
+        ofile = sys.stdout
    
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(adc_cs, GPIO.OUT, initial=GPIO.HIGH)
@@ -54,40 +63,39 @@ def main():
 
     # Samples need to be taken across the full range of the output up to 3V3
     numSamples = int(input("Enter the number of samples to be taken per channel: "))
-    numChannels = int(input("Enter the number of channels to be calibrated: "))
+    chan = int(input("Enter the number of the channel to be calibrated: "))
     expected = []
     measured = []
     
-    for chan in range(numChannels):
-        x = input("Connect voltage supply to channel {}".format(chan))
-        for voltage in range(numSamples):
-            x = input("Set supply to {} volts".format(round((voltage*3.3)/numSamples,2)))
-            expected.append(round((voltage*3.3)/numSamples,2))
-            measured.append(getSample(chan))
-            
-        print("For channel {}:".format(chan))
-        print("measured voltages: {}".format(measured))
-        print("expected voltages: {}".format(expected)) 
+    x = input("Connect voltage supply to channel {}".format(chan))
+    for voltage in range(numSamples):
+        x = input("Set supply to {} volts".format((voltage*3.3)/numSamples))
+        expected.append((voltage*3.3)/numSamples)
+        measured.append(getSample(chan))
+        
+    print("For channel {}:".format(chan), file=ofile)
+    print("measured voltages: {}".format(measured), file=ofile)
+    print("expected voltages: {}".format(expected), file=ofile) 
 
-        reg_error = []
-        raw_error = []
+    reg_error = []
+    raw_error = []
 
-        #calculate raw error
-        for i in range(len(expected)):
-            raw_error.append(abs(expected[i] - measured[i]))
+    #calculate raw error
+    for i in range(len(expected)):
+        raw_error.append(abs(expected[i] - measured[i]))
 
-        print('Maximum error before regression: {}'.format(max(raw_error)))
+    print('Maximum error before regression: {}'.format(max(raw_error)), file=ofile)
 
-        B = calculate_regression(expected, measured, reg_error)
+    B = calculate_regression(expected, measured, reg_error)
 
-        print('Maximum error after regression: {}'.format(max(reg_error)))
-        print('Regression coefficients: ')
-        print(B)
+    print('Maximum error after regression: {}'.format(max(reg_error)), file=ofile)
+    print('Regression coefficients: ', file=ofile)
+    print(B, file=ofile)
 
     spi.close()
     GPIO.cleanup()
-    if sys.stdout.name != '<stdout>':
-        sys.stdout.close()
+    if len(sys.argv) > 1:
+        ofile.close()
 
 if __name__ == "__main__":
     main()
