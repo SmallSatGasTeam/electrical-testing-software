@@ -17,14 +17,16 @@ class WireCutter:
         
         #define the pinout. The on signal is PWM with a frequency of 100 Hz
         self.onpin = p_on
-        self.on = GPIO.PWM(p_on, 100)
-        self.duty_cycle = 100.0
-        self.on.ChangeDutyCycle(self.duty_cycle)
-        
+        # self.on = GPIO.PWM(p_on, 10)
         self.safety1 = p_safety1
-        self.safety2 = p_safety2  
+        self.safety1 = GPIO.PWM(p_safety1, 500)
+        self.safety2 = p_safety2
+
+        self.duty_cycle = 75.0
+        self.safety1.ChangeDutyCycle(self.duty_cycle)
         
-        self.burn_time = 2.0
+        
+        self.burn_time = 5.0
 
         # Allow user to verify settings
         print( "GPIO initialized for: ", self.name, ". Burn wire should be OFF" )
@@ -32,7 +34,8 @@ class WireCutter:
     def set_duty_cycle( self, p_duty_cycle):
         if( p_duty_cycle <= 100.0 and p_duty_cycle > 0 ):
             self.duty_cycle = p_duty_cycle
-            self.on.ChangeDutyCycle(self.duty_cycle)
+            self.safety1.ChangeDutyCycle(self.duty_cycle)
+            print("duty cycle set to {}".format(self.duty_cycle))
             
     def set_burn_time( self, p_burn_time ):
         if p_burn_time > 0 and p_burn_time < 5:
@@ -41,17 +44,18 @@ class WireCutter:
     def fire( self ):
         # Fire burn wire
         print("{} is on".format(self.name))
-        self.on.start(self.duty_cycle)
-        GPIO.output( self.safety1, GPIO.HIGH )
-        GPIO.output( self.safety2, GPIO.HIGH )
+        GPIO.output(self.onpin, GPIO.LOW)
+        #GPIO.output(self.safety1, GPIO.HIGH)
+        GPIO.output(self.safety2, GPIO.HIGH)
+        self.safety1.start(self.duty_cycle)
         
         # Burn for the set amount of seconds (between 0 and 5)
         sleep(self.burn_time)
 
         # Turn burn wire off
-        self.on.stop()
+        self.safety1.stop()
         GPIO.output( self.onpin, GPIO.HIGH)
-        GPIO.output( self.safety1, GPIO.LOW )
+        #GPIO.output( self.safety1, GPIO.LOW )
         GPIO.output( self.safety2, GPIO.LOW )
         print("{} is off".format(self.name))
 
@@ -75,13 +79,24 @@ def main():
         WC2 = WireCutter( "WC2", 5, 26, 19 )
         
     # Test burn wires with varying duty cycles until power is limited.
-    WC = WC1
-    dc_val = input("Enter duty cycle between 0 and 100: ")
-    WC.set_duty_cycle(float(dc_val))
-    WC.fire()
+    wcChoice = input("Enter wirecutter to test <1,2>: ")
+    if(wcChoice == '1'):
+        WC = WC1
+    elif(wcChoice == '2'):
+        WC = WC2
+    else:
+        WC = WC1
+        print("Invalid input, defaulting to wirecutter 1")
+    
+    selection = '1'
+    while (selection == '1'):
 
-    # cleanup and end program
-    input("All tests completed. Exiting program. Press <ENTER> to quit." )
+        dc_val = input("Enter duty cycle between 0 and 100: ")
+        WC.set_duty_cycle(float(dc_val))
+        WC.fire()
+
+        # cleanup and end program
+        selection = input("All tests completed. Press <1> to run test again. Any other key to exit. " )
     GPIO.cleanup()
 
 
