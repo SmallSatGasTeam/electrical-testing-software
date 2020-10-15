@@ -2,7 +2,7 @@ import numpy as np
 import spidev
 import RPi.GPIO as GPIO
 import sys
-from dtetime import date
+from datetime import date
 
 adc_cs = 22
 spi = spidev.SpiDev()
