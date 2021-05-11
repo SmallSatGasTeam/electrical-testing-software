@@ -19,8 +19,7 @@ print(temp0_raw)
 print("temp0: ")
 print(temp0)
 
-print("Raw data temp1: ")
-print(temp1_raw)
+input("Reading temp1 data, press <Enter> to continue...")
   
 spi1 = spidev.SpiDev()
 spi1.open(0, 1)
@@ -28,6 +27,9 @@ temp1_raw = spi1.readbytes(2)
 
 
 temp1 = ((temp1_raw[0] * 64) + (temp1_raw[1] >> 3))* 0.0625
+
+print("Raw data temp1: ")
+print(temp1_raw)
 
 print("temp1: ")
 print(temp1)
