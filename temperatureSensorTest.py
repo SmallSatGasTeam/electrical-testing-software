@@ -1,11 +1,12 @@
 import spidev
 
-input("Connecting to temperature sensor 0")
+#input("Connecting to temperature sensor 0")
 
 spi0 = spidev.SpiDev()
 spi0.open(0, 0)
+spi0.max_speed_hz = 1000;
 
-input("Reading temp0 data, press <Enter> to continue...")
+#input("Reading temp0 data, press <Enter> to continue...")
 
 temp0_raw = spi0.readbytes(2)  #Read just the first 13 bits, as the last three bits of the 16 byte word are not used
 
@@ -19,10 +20,11 @@ print(temp0_raw)
 print("temp0: ")
 print(temp0)
 
-input("Reading temp1 data, press <Enter> to continue...")
+#input("Reading temp1 data, press <Enter> to continue...")
   
 spi1 = spidev.SpiDev()
 spi1.open(0, 1)
+spi1.max_speed_hz = 1000;
 temp1_raw = spi1.readbytes(2)  
 
 
