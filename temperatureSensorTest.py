@@ -12,7 +12,7 @@ temp0_raw = spi0.readbytes(2)  #Read just the first 13 bits, as the last three b
 
 #This function converts the two bytes to the temperature value. The data is stored as two bytes where T13 is the most significant bit
 #| T13 T12 T11 T10 T9 T8 T7 T6 |  | T5 T4 T3 T2 T1 1 1 1 |
-temp0 = ((temp0_raw[0] * 64) + (temp0_raw[1] >> 3))* 0.0625
+temp0 = ((temp0_raw[0] * 32) + (temp0_raw[1] >> 3))* 0.0625
 
 print("Raw data temp0: ")
 print(temp0_raw)
@@ -28,7 +28,7 @@ spi1.max_speed_hz = 1000;
 temp1_raw = spi1.readbytes(2)  
 
 
-temp1 = ((temp1_raw[0] * 64) + (temp1_raw[1] >> 3))* 0.0625
+temp1 = ((temp1_raw[0] * 32) + (temp1_raw[1] >> 3))* 0.0625
 
 print("Raw data temp1: ")
 print(temp1_raw)
